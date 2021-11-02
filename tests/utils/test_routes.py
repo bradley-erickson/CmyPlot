@@ -1,9 +1,9 @@
-from plotting.utils.routes import navbar_toggle, handle_routes
-from plotting.pages.home import home
-from plotting.pages.bad_url import bad_url
-from plotting.pages.upload import upload
-from plotting.pages.table import table
-from plotting.pages.graph import graph
+from src.plotting.utils.routes import navbar_toggle, handle_routes
+from src.plotting.pages.home import home
+from src.plotting.pages.bad_url import bad_url
+from src.plotting.pages.upload import upload
+from src.plotting.pages.table import table
+from src.plotting.pages.graph import graph
 
 
 def test_navbar_toggle():
@@ -22,26 +22,26 @@ def test_navbar_toggle():
 
 def test_handle_routes():
 
-    pathname = '/'
+    pathname = "/"
     output = handle_routes.__wrapped__(pathname)
     assert output == home.layout
 
-    pathname = '/home'
+    pathname = "/home"
     output = handle_routes.__wrapped__(pathname)
     assert output == home.layout
 
-    pathname = '/upload'
+    pathname = "/upload"
     output = handle_routes.__wrapped__(pathname)
     assert output == upload.layout
 
-    pathname = '/table'
+    pathname = "/table"
     output = handle_routes.__wrapped__(pathname)
     assert output == table.layout
 
-    pathname = '/graph'
+    pathname = "/graph"
     output = handle_routes.__wrapped__(pathname)
     assert output == graph.layout
 
-    pathname = 'totally-fake-path'
+    pathname = "totally-fake-path"
     output = handle_routes.__wrapped__(pathname)
     assert output == bad_url.layout
