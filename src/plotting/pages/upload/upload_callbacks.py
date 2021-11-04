@@ -6,17 +6,17 @@ from dash.exceptions import PreventUpdate
 import pandas as pd
 
 # local imports
-from plotting.app import app
-from plotting.pages.upload import upload
-from plotting.layout.layout import store_id
-from plotting.utils import functions as func
+from src.plotting.app import app
+from src.plotting.pages.upload import upload
+from src.plotting.layout.layout import store_id
+from src.plotting.utils import functions as func
 
 
 @app.callback(
-    Output(upload.info_id, 'children'),
-    Output(store_id, 'data'),
-    Input(upload.upload_id, 'contents'),
-    State(upload.upload_id, 'filename')
+    Output(upload.info_id, "children"),
+    Output(store_id, "data"),
+    Input(upload.upload_id, "contents"),
+    State(upload.upload_id, "filename"),
 )
 def update_upload(contents, filename):
     """Handle uploading data
@@ -39,29 +39,27 @@ def update_upload(contents, filename):
     if filename is None:
         raise PreventUpdate
 
-    content_type, content_string = contents.split(',')
+    content_type, content_string = contents.split(",")
 
     decoded = base64.b64decode(content_string)
 
     try:
-        if filename.endswith('.csv'):
-            df = pd.read_csv(
-                io.StringIO(decoded.decode('utf-8', 'replace'))
-            )
+        if filename.endswith(".csv"):
+            df = pd.read_csv(io.StringIO(decoded.decode("utf-8", "replace")))
         else:
             raise Exception
     except Exception as e:
         print(e)
-        error_text = 'Error uploading, something is wrong with the file.'
+        error_text = "Error uploading, something is wrong with the file."
         return error_text, None
 
-    succ_text = 'File uploaded successfully: ' + filename
-    return succ_text, {'df': df.to_dict('records')}
+    succ_text = "File uploaded successfully: " + filename
+    return succ_text, {"df": df.to_dict("records")}
 
 
 @app.callback(
-    Output({'type': upload.buttons_id, 'index': ALL}, 'disabled'),
-    Input(store_id, 'data')
+    Output({"type": upload.buttons_id, "index": ALL}, "disabled"),
+    Input(store_id, "data"),
 )
 def set_button_status(data):
     """Set buttons to disabled or not
